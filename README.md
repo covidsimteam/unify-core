@@ -743,3 +743,26 @@ PGAdmin: http://dev.covidsimteam.work:5050
 Flower: http://dev.covidsimteam.work:5555
 
 Traefik UI: http://dev.covidsimteam.work:8090
+
+
+## Stats
+
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+JSON                             5              0              0          14105
+Python                          43            334            132           1241
+Vuejs Component                 17             92              0           1124
+TypeScript                      25             56              8            640
+Markdown                         2            294              0            482
+YAML                            19              9             27            354
+SVG                              1              0              0            149
+Bourne Shell                     9             26             10             90
+HTML                             4              0             39             59
+INI                              1             16              0             55
+JavaScript                       2              0              1             44
+Mako                             1              7              0             17
+Dockerfile                       1             12              3             13
+-------------------------------------------------------------------------------
+SUM:                           130            846            220          18373
+-------------------------------------------------------------------------------
