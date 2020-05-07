@@ -138,11 +138,16 @@ We have the following `GET` endpoints.
 
 /nepal_spatial/gov_borders
 /nepal_spatial/gov_districts
-/nepal_spatial/gov_gapanapas
 /nepal_spatial/gov_provinces
 /nepal_spatial/gov_rivers
 /nepal_spatial/gov_roads
+
 /nepal_spatial/gov_wards
+/nepal_spatial/gov_gapanapas
+
+# n = 1 to 7
+/nepal_spatial/gapanapas_province_n
+/nepal_spatial/wards_province_n
 ```
 
 Responses will have `_id`, `_rev` and a JSON array of objects like in the following example:
