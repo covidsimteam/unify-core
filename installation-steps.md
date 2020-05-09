@@ -47,14 +47,6 @@ When prompted please select 'standalone' setup and use 0.0.0.0 address instead o
 
 4. Enable DB access from non-local IP addresses:
 
-We will be needing the following ports to be accessible remotely:
-
-- CoucbDB: 5984
-- Neo4j: 7473, 7687
-- Neo4j Graphite monitoring: 2003
-- Java/Scala application server: 8081 (after it will be added later)
-
-
 For Neo4j:
 
 Edit neo4j.conf as superuser e.g.:
@@ -82,7 +74,68 @@ For couchdb:
 netstat -tlpn | grep 5984
 ```
 
-Lastly, please also check the firewall and iptables for any conflicting rules disallowing these ports.
+5. Install Keycloack for user administration:
+
+Install and start `docker` first and enable it resume on server restart:
+```Bash
+sudo apt install docker.io
+sudo systemctl enable docker.service
+sudo systemctl start docker.service
+```
+
+Check if a docker group was created:
+```Bash
+cat /etc/group | grep docker
+```
+
+If you don't see something like `docker:x:118:` (or some other number suffix) then add it using `sudo groupadd docker`.
+
+Now add your user to the `docker` group and login again as follows:
+```Bash
+sudo usermod -aG docker $USER
+su - $USER
+```
+
+Now you should be able to run docker commands without `sudo`, which is highly recommended.
+
+Install dockerized `keycloak` on 8081:
+
+```Bash
+ docker run -p 8081:8080 -d -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin quay.io/keycloak/keycloak:10.0.1
+```
+
+Keycloak defaults to HTTPS for all external IP addresses and if you are installing Keycloak on a remote machine there is effectively no way to access the Keycloak admin console out of the box. Thus you have to configure HTTPS and this may depend on your server setup so please contact your server administrator for more info on this.
+
+However, for testing and for configuring Keycloak realms, you can use the Keycloak's admin CLI. For this `wget` or `curl` Keycloak tarball and add the `bin` folder to your path as follows:
+
+```Bash
+wget https://downloads.jboss.org/keycloak/10.0.1/keycloak-10.0.1.zip
+unzip keycloak-10.0.1.zip
+cd keycloak-10.0.1.zip/bin
+export "PATH=\$PATH:$(pwd)" >> ~/.bashrc
+source ~/.bashrc
+```
+
+Now you can use `kcadm.sh` to update the master realm as follows:
+
+***Please be sure to revert this back from the UI/CLI before going to production***
+
+```Bash
+kcadm.sh config credentials --server http://localhost:8081/auth --realm master --user admin
+kcadm.sh update realms/master -s sslRequired=NONE
+```
+
+A covidsim.team technical personnel can take over from the web admin console from here for further config.
+
+Lastly, please also check the firewall and iptables for any conflicting rules disallowing the ports mentioned:
+
+In summary will be needing the following ports to be accessible remotely:
+
+- CoucbDB (append only document database): 5984
+- Neo4j (graph database): 7473, 7687
+- Neo4j Graphite monitoring: 2003
+- Keycloak (user access and SSO server): 8081 
+- Java/Scala application server: 8080 (after it will be added later)
 
 _____________________________________________________________________________________________________
 
