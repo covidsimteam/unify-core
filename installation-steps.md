@@ -10,7 +10,7 @@ We would like to note that
 
 ## Installation Steps
 
-1. Install SDKMAN and JDK 11.
+### 1. Install SDKMAN and JDK 11.
 
 ```Bash
 sudo apt install zip unzip -y
@@ -20,7 +20,7 @@ sdk install java 11.0.7.hs-adpt
 ```
 
 
-2. Install Neo4j 4.0:
+### 2. Install Neo4j 4.0:
 
 ```Bash
 wget -O - https://debian.neo4j.com/neotechnology.gpg.key | sudo apt-key add -
@@ -33,7 +33,7 @@ sudo neo4j-admin set-initial-password passwordOfYourChoice
 ```
 
 
-3. Install CouchDB:
+### 3. Install CouchDB:
 
 ```Bash
 echo "deb https://apache.bintray.com/couchdb-deb focal main" | sudo tee -a /etc/apt/sources.list
@@ -45,7 +45,7 @@ sudo apt-get install couchdb
 When prompted please select 'standalone' setup and use 0.0.0.0 address instead of 127.0.0.1. 
 
 
-4. Enable DB access from non-local IP addresses:
+### 4. Enable DB access from non-local IP addresses:
 
 For Neo4j:
 
@@ -74,7 +74,7 @@ For couchdb:
 netstat -tlpn | grep 5984
 ```
 
-5. Install Keycloack for user administration:
+### 5a. Install Keycloack for user administration:
 
 Install and start `docker` first and enable it resume on server restart:
 ```Bash
@@ -126,8 +126,6 @@ kcadm.sh config credentials --server http://localhost:8081/auth --realm master -
 kcadm.sh update realms/master -s sslRequired=NONE
 ```
 
-A covidsim.team technical personnel can take over from the web admin console from here for further config.
-
 Lastly, please also check the firewall and iptables for any conflicting rules disallowing the ports mentioned:
 
 In summary will be needing the following ports to be accessible remotely:
@@ -137,6 +135,33 @@ In summary will be needing the following ports to be accessible remotely:
 - Neo4j Graphite monitoring: 2003
 - Keycloak (user access and SSO server): 8081 
 - Java/Scala application server: 8080 (after it will be added later)
+
+_____________________________________________________________________________________________________
+
+### 5b. Keycloak Config (Optional)
+
+A covidsim.team technical personnel can take over from the web admin console after 5a for further config. However I would like to list the steps here too for the sake of completeness:
+
+First of all, go to <keycloak-url>/auth/realms/<realm>/account and update the master realm's `admin` user and password and keep the credentials in a secured wallet e.g. KeePass. 
+
+Next create a realm called 'National COVID-19 Datahub'
+- Open the Keycloak Admin Console 
+- Hover the mouse over the dropdown in the top-left corner where it says Master 
+- Click on Add realm and fill in the details
+
+Next create email settings for this realm:
+
+- Click the Realm Settings in the left pane.
+- Click the Email tab.
+- Provide the Host for your email account. For example, “smtp.gmail.com” is the host for the Gmail accounts.
+- Provide the Port. For Gmail account, use 587 for TLS and 465 for SSL.
+- Provide “From Display Name” Covid Sim Team.
+- Provide “From” email address. "covidsimteam@gmail.com”.
+- Enable SSL or TLS depending on the port selected.
+- Provide username: `covidsimteam` and the password you received from us.
+- Click the Save button and click 'Test Connection'
+
+Next create users as needed from 'Users' on the left pane -> 'Add user' in the table header. Make sure to use the option to send them an email asking to update their password (from the credentials tab).
 
 _____________________________________________________________________________________________________
 
