@@ -95,6 +95,7 @@ Now add your user to the `docker` group and login again as follows:
 sudo usermod -aG docker $USER
 su - $USER
 ```
+You can also use `newgrp docker` to activate group changes if you have `newgrp` on your system.
 
 Now you should be able to run docker commands without `sudo`, which is highly recommended.
 
