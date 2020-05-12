@@ -35,6 +35,8 @@ sudo neo4j-admin set-initial-password passwordOfYourChoice
 
 ### 3. Install CouchDB:
 
+You may need to change the distro codename `focal` to the one you see after `cat /etc/lsb-release`:
+
 ```Bash
 echo "deb https://apache.bintray.com/couchdb-deb focal main" | sudo tee -a /etc/apt/sources.list
 curl -L https://couchdb.apache.org/repo/bintray-pubkey.asc   | sudo apt-key add -
